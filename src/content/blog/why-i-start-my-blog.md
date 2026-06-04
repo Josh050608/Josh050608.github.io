@@ -3,6 +3,7 @@ title: '这是我的blog'
 description: '为什么想要创建这个blog'
 pubDate: 'Jun 04 2026'
 heroImage: '../../assets/blog-placeholder-3.jpg'
+featured: true
 ---
 
 事情得从失眠说起.

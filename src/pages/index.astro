@@ -1,49 +1,128 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const featured = (await getCollection('blog'))
+	.filter((post) => post.data.featured)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="intro">
+				<h1>Hi, I am Josh </h1>
+				<!-- TODO: Josh 把下面这段换成你的自我介绍 -->
+				<p class="bio">北京邮电大学网络空间安全本科生,轻度影迷与音乐爱好者.<br/></p>
+				<p class="bio">研究方向是AI安全/软件安全/AI agent 安全<br/></p>
+				<p class="bio">喜欢看番,喜欢同人.<br/></p>
+				<div class="intro-links">
+					<a href="https://github.com/Josh050608" target="_blank" rel="me">GitHub</a>
+					<span class="sep">·</span>
+					<a href="mailto:sbzzx050608@gmail.com">邮箱</a>
+				</div>
+			</section>
+
+			<section class="featured">
+				<h2 class="section-title">✨ 推荐文章</h2>
+				{
+					featured.length === 0 ? (
+						<p class="empty">
+							还没有精选文章。在某篇文章表头加上 <code>featured: true</code> 就会出现在这里。
+						</p>
+					) : (
+						<ul class="post-list">
+							{featured.map((post) => (
+								<li>
+									<a href={`/blog/${post.id}/`}>
+										<span class="post-title">{post.data.title}</span>
+										<span class="post-meta">
+											<FormattedDate date={post.data.pubDate} />
+											{post.data.description && (
+												<span class="post-desc"> · {post.data.description}</span>
+											)}
+										</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					)
+				}
+				<a class="all-link" href="/blog/">查看全部文章 →</a>
+			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.intro {
+		padding: 0.5em 0 2.5em;
+		border-bottom: 1px solid rgb(var(--gray-light));
+		margin-bottom: 2.5em;
+	}
+	.intro h1 {
+		margin-bottom: 0.4em;
+	}
+	.bio {
+		color: rgb(var(--gray-dark));
+		max-width: 40em;
+	}
+	.intro-links {
+		margin-top: 1.2em;
+		font-size: 0.95em;
+	}
+	.intro-links .sep {
+		color: rgb(var(--gray-light));
+		margin: 0 0.5em;
+	}
+	.section-title {
+		font-size: 1.4em;
+		margin-bottom: 1.2em;
+	}
+	.post-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.post-list li {
+		margin-bottom: 1.4em;
+	}
+	.post-list a {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+	.post-title {
+		display: block;
+		font-size: 1.2em;
+		font-weight: 700;
+		color: rgb(var(--black));
+	}
+	.post-list a:hover .post-title {
+		color: var(--accent);
+	}
+	.post-meta {
+		display: block;
+		font-size: 0.85em;
+		color: rgb(var(--gray));
+		margin-top: 0.25em;
+	}
+	.all-link {
+		display: inline-block;
+		margin-top: 1em;
+		font-weight: 600;
+	}
+	.empty {
+		color: rgb(var(--gray));
+	}
+</style>

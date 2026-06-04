@@ -3,6 +3,7 @@ title: 'Hello, Astro 博客！'
 description: '这是用 Claude Code 一步步搭起来、部署在 GitHub Pages 上的第一篇文章。'
 pubDate: 'Jun 04 2026'
 heroImage: '../../assets/blog-placeholder-2.jpg'
+featured: true
 ---
 
 这是一篇**演示文章**，用来跑通「写文章 → `git push` → 自动部署上线」的完整流程。

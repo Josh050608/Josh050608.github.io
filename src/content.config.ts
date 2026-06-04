@@ -14,6 +14,8 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
+			// Set `featured: true` in a post's frontmatter to show it on the homepage.
+			featured: z.boolean().default(false),
 		}),
 });
 
